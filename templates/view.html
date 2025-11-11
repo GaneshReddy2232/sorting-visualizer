@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }} — Step {{ idx+1 }}/{{ total }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if autoplay and idx+1 < total %}
+    <meta http-equiv="refresh" content="{{ '%.2f'|format(speed) }};url={{ url_for('advance', dir='next') }}">
+  {% endif %}
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <h1>{{ title }}</h1>
+      <p class="sub">Step {{ idx+1 }} of {{ total }} · Autoplay: <strong>{{ 'ON' if autoplay else 'OFF' }}</strong>{% if autoplay %} ({{ '%.2f'|format(speed) }}s){% endif %}</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2 class="card-title">Controls</h2>
+      <div class="toolbar">
+        <form action="{{ url_for('advance') }}" method="post" class="toolbar-left">
+          <button name="dir" value="first" class="btn ghost" title="First">&laquo;</button>
+          <button name="dir" value="prev"  class="btn ghost" title="Previous">&lsaquo;</button>
+          <button name="dir" value="next"  class="btn primary" title="Next">&rsaquo;</button>
+          <button name="dir" value="last"  class="btn ghost" title="Last">&raquo;</button>
+          <button name="dir" value="toggle_auto" class="btn secondary" title="Play/Pause">
+            {{ 'Pause' if autoplay else 'Play' }}
+          </button>
+        </form>
+
+        <form action="{{ url_for('reset') }}" method="post" class="toolbar-right">
+          <button class="btn danger">End & Reset</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Visualization</h2>
+      <div class="legend">
+        <span class="chip compare">Comparing</span>
+        <span class="chip swap">Swapping/Moving</span>
+        <span class="chip sorted">Sorted/Fixed</span>
+      </div>
+
+      <div class="board">
+        {% set arr = frame.arr %}
+        {% set maxv = arr|max %}
+        {% set cmp = frame.hl.get('compare', []) %}
+        {% set swp = frame.hl.get('swap', []) %}
+        {% set srt = frame.hl.get('sorted', []) %}
+
+        <div class="bars">
+          {% for v in arr %}
+            {% set height = (v / maxv * 100) if maxv > 0 else 1 %}
+            {% set i = loop.index0 %}
+            {% set cls = 'bar' %}
+            {% if i in cmp %}{% set cls = cls + ' compare' %}{% endif %}
+            {% if i in swp %}{% set cls = cls + ' swap' %}{% endif %}
+            {% if i in srt %}{% set cls = cls + ' sorted' %}{% endif %}
+            <div class="{{ cls }}" style="height: {{ '%.2f'|format(height) }}%"></div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <p class="note"><strong>Note:</strong> {{ frame.note }}</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Frames rendered on the server via Flask; page advances using meta refresh.</p>
+  </footer>
+</body>
+</html>

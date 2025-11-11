@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sorting Visualizer — Python Only (No JS)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <h1>Sorting Visualizer</h1>
+      <p class="sub">Server-rendered steps · No JavaScript · Meta refresh autoplay</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2 class="card-title">Configure run</h2>
+      <form action="{{ url_for('start') }}" method="post" class="form-grid">
+
+        <div class="field">
+          <label class="label" for="algorithm">Algorithm</label>
+          <select id="algorithm" name="algorithm" class="input">
+            {% for key, (label, _) in algos.items() %}
+              <option value="{{ key }}">{{ label }}</option>
+            {% endfor %}
+          </select>
+          <p class="help">Pick a sorting algorithm to visualize.</p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="size">Array size</label>
+          <input id="size" type="number" name="size" class="input" value="30" min="5" max="100" required>
+          <p class="help">Between 5 and 100 items.</p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="speed">Step interval</label>
+          <div class="input-append">
+            <input id="speed" type="number" name="speed" class="input" value="0.25" min="0.01" max="1.00" step="0.01" required>
+            <span class="suffix">sec</span>
+          </div>
+          <p class="help">From <strong>0.01s</strong> (10 ms) to <strong>1.00s</strong> per frame.</p>
+        </div>
+
+        <div class="field switch">
+          <input id="autoplay" type="checkbox" name="autoplay">
+          <label for="autoplay">Autoplay (auto-advance using meta refresh)</label>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn primary">Start visualization</button>
+          <a class="btn ghost" href="https://en.wikipedia.org/wiki/Sorting_algorithm" target="_blank" rel="noopener">Learn about sorting</a>
+        </div>
+      </form>
+    </section>
+
+    <section class="muted">
+      <form action="{{ url_for('reset') }}" method="post">
+        <button type="submit" class="btn danger">Reset/Clear Current Run</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Built with Flask + Jinja. No client-side JavaScript.</p>
+  </footer>
+</body>
+</html>
