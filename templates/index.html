@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Sorting Visualizer — Python Only (No JS)</title>
+  <title>Sorting Visualizer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
@@ -10,7 +10,6 @@
   <header class="topbar">
     <div class="wrap">
       <h1>Sorting Visualizer</h1>
-      <p class="sub">Server-rendered steps · No JavaScript · Meta refresh autoplay</p>
     </div>
   </header>
 
@@ -46,7 +45,7 @@
 
         <div class="field switch">
           <input id="autoplay" type="checkbox" name="autoplay">
-          <label for="autoplay">Autoplay (auto-advance using meta refresh)</label>
+          <label for="autoplay">Autoplay</label>
         </div>
 
         <div class="actions">
@@ -63,8 +62,5 @@
     </section>
   </main>
 
-  <footer class="footer">
-    <p>Built with Flask + Jinja. No client-side JavaScript.</p>
-  </footer>
 </body>
 </html>
